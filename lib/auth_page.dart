@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'clienthome.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class _AuthPageState extends State<AuthPage> {
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
 
-  List<String> roles = ['Citizen', 'Volunteer', 'Official'];
+  List<String> roles = ['Citizen', 'Volunteer', 'Official', 'Client'];
 
   @override
   void dispose() {
@@ -67,11 +68,19 @@ class _AuthPageState extends State<AuthPage> {
           ),
         ),
         child: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: _buildGlassCard(),
-            ),
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
+              _buildAppNameHeader(),
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: _buildGlassCard(),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -84,20 +93,20 @@ class _AuthPageState extends State<AuthPage> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.white.withOpacity(0.2),
-                  Colors.white.withOpacity(0.1),
+                  Colors.white.withOpacity(0.15),
+                  Colors.white.withOpacity(0.05),
                 ],
               ),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withOpacity(0.15),
                 width: 1,
               ),
             ),
@@ -125,7 +134,7 @@ class _AuthPageState extends State<AuthPage> {
           isLogin ? 'Welcome Back' : 'Create Account',
           style: const TextStyle(
             fontSize: 22,
-            fontWeight: FontWeight.w300,
+            fontWeight: FontWeight.w500,
             color: Colors.white,
             letterSpacing: 1.2,
           ),
@@ -136,7 +145,7 @@ class _AuthPageState extends State<AuthPage> {
           style: TextStyle(
             fontSize: 14,
             color: Colors.white.withOpacity(0.8),
-            fontWeight: FontWeight.w300,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ],
@@ -280,13 +289,13 @@ class _AuthPageState extends State<AuthPage> {
         style: const TextStyle(
           color: Colors.white,
           fontSize: 14,
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(
             color: Colors.white.withOpacity(0.8),
-            fontWeight: FontWeight.w300,
+            fontWeight: FontWeight.w500,
             fontSize: 12,
           ),
           prefixIcon: Icon(
@@ -326,7 +335,7 @@ class _AuthPageState extends State<AuthPage> {
           labelText: 'Role',
           labelStyle: TextStyle(
             color: Colors.white.withOpacity(0.8),
-            fontWeight: FontWeight.w300,
+            fontWeight: FontWeight.w500,
             fontSize: 12,
           ),
           prefixIcon: Icon(
@@ -337,11 +346,11 @@ class _AuthPageState extends State<AuthPage> {
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
-        dropdownColor: const Color(0xFF764ba2),
+        dropdownColor: Colors.white.withOpacity(0.15),
         style: const TextStyle(
           color: Colors.white,
           fontSize: 14,
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w500,
         ),
         items: roles.map((String role) {
           return DropdownMenuItem<String>(
@@ -364,7 +373,19 @@ class _AuthPageState extends State<AuthPage> {
       height: 44,
       child: ElevatedButton(
         onPressed: () {
-          // Handle login
+          if (loginFormKey.currentState!.validate()) {
+            if (selectedRole == 'Client') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OceanPulseHomePage()),
+              );
+            } else {
+              // Handle other roles or show a message
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Login functionality for $selectedRole is not implemented yet.')),
+              );
+            }
+          }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white.withOpacity(0.2),
@@ -437,7 +458,7 @@ class _AuthPageState extends State<AuthPage> {
         style: TextStyle(
           color: Colors.white.withOpacity(0.9),
           fontSize: 13,
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );
@@ -461,7 +482,7 @@ class _AuthPageState extends State<AuthPage> {
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.7),
                   fontSize: 12,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -490,7 +511,7 @@ class _AuthPageState extends State<AuthPage> {
               'Continue with Google',
               style: TextStyle(
                 fontSize: 14,
-                fontWeight: FontWeight.w300,
+                fontWeight: FontWeight.w500,
                 color: Colors.white,
               ),
             ),
@@ -519,7 +540,7 @@ class _AuthPageState extends State<AuthPage> {
           style: TextStyle(
             color: Colors.white.withOpacity(0.8),
             fontSize: 13,
-            fontWeight: FontWeight.w300,
+            fontWeight: FontWeight.w500,
           ),
         ),
         TextButton(
@@ -534,11 +555,45 @@ class _AuthPageState extends State<AuthPage> {
             style: const TextStyle(
               color: Colors.white,
               fontSize: 13,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w500,
               decoration: TextDecoration.underline,
             ),
           ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildAppNameHeader() {
+    return Column(
+      children: [
+        Text(
+          'Marnil',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Colors.white.withOpacity(0.9),
+            letterSpacing: 2.0,
+            shadows: [
+              Shadow(
+                color: Colors.black.withOpacity(0.4),
+                offset: const Offset(0, 2),
+                blurRadius: 4,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Together for Safer Shores.',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.white.withOpacity(0.7),
+            letterSpacing: 1.2,
+          ),
+        ),
+        const SizedBox(height: 12),
       ],
     );
   }

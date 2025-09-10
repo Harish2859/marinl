@@ -1,10 +1,13 @@
-# Fix Asset Loading Error
+# TODO List for Auth Page Styling
 
 ## Completed Tasks
-- [x] Identified the issue: File extension mismatch (.png vs .jpg)
-- [x] Updated `lib/auth_page.dart` to reference `login_background.jpg` instead of `login_background.png`
-- [x] Verified assets are properly declared in `pubspec.yaml`
+- [x] Increase blur sigma from 15 to 20 for more transparency
+- [x] Change all FontWeight.w300 to FontWeight.w500 for bolder fonts
+- [x] Add app name "Marnil" and tagline at the top of the page
+- [x] Style dropdown with transparent background to match theme
+- [x] Update layout to include app name header
 
-## Next Steps
-- [ ] Test the app to confirm the asset loads correctly
-- [ ] Run `flutter pub get` if needed to ensure dependencies are up to date
+## Followup Steps
+- [x] Test the UI changes for readability and visual appeal
+- [x] Run the app to verify the glass effect and transparency
+- [x] Ensure text remains readable with increased blur
